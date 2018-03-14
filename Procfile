@@ -1,1 +1,1 @@
-worker: build/install/textfixer/bin/textfixer.bat
+worker: build/install/textfixer/bin/textfixer
