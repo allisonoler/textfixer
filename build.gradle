@@ -17,3 +17,14 @@ dependencies {
     compile 'com.sun.mail:javax.mail:1.6.0'
     compile 'com.vdurmont:emoji-java:4.0.0'
 }
+
+task stage(dependsOn: ['clean', "installDist"])
+installDist.mustRunAfter clean
+
+
+task copyToLib(type: Copy) {
+    into "$buildDir/lib"
+    from(configurations.compile)
+}
+
+stage.dependsOn(copyToLib)

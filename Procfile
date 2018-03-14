@@ -1,1 +1,1 @@
-worker: java -jar textfixer.jar
+worker: build/install/textfixer/bin/textfixer.bat
