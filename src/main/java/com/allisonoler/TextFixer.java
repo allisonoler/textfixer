@@ -204,7 +204,14 @@ public class TextFixer {
         changedMessage = changedMessage.replace("\u201d", "\"");
         changedMessage = changedMessage.replace("\u2018", "\'");
         changedMessage = changedMessage.replace("\u2019", "\'");
+        if (!changedMessage.equals(message)) {
+            System.out.println("Smart punctuation found and changed.");
+        }
+        String punctuationFixedMessage = changedMessage;
         changedMessage = EmojiParser.parseToAliases(changedMessage);
+        if (!punctuationFixedMessage.equals(changedMessage)) {
+            System.out.println("Emoji(s) found and changed.");
+        }
         return changedMessage;
     }
 
@@ -216,6 +223,7 @@ public class TextFixer {
     }
 
     private static String fixMessagesWithPictures(String message) {
+        System.out.println("Picture found and changed.");
         return message + "[PICTURE]";
     }
 
@@ -235,6 +243,7 @@ public class TextFixer {
         if (messagePart != null) {
             String subjectData = getSubject(actualMessage);
             String personFrom = subjectData.replace("New text message from ", "");
+            System.out.println("This message is from " + personFrom);
             String decodedMessage = getDecodedBody(messagePart);
             String changedMessage = fixMessage(decodedMessage);
             String simplifiedMessage = chopOffUselessParts(changedMessage);
@@ -245,12 +254,17 @@ public class TextFixer {
             Collection<String> messageParts = breakUpMessage(simplifiedMessage);
             if (!changedMessage.equals(decodedMessage) || mimeSearchResults.getPictureOrNot()) {
                 sendMessage(messageParts, user, subjectData);
+                System.out.println("Message changed and sent");
+            }
+            else {
+                System.out.println("Message not changed");
             }
         }
         else {
             System.out.println("No plain text version of body");
         }
         setLabel(message, user);
+        System.out.println("Finished processing message");
     }
 
     private static void sendMessage(Collection<String> messageArray, User user, String subject) throws AddressException, MessagingException, IOException {
@@ -282,6 +296,7 @@ public class TextFixer {
                     System.out.println("No messages found.");
                 } else {
                     for (Message message : messages) {
+                        System.out.println("Message found for "+ user.getUserName() +".  Processing...");
                         processMessage(message, user);
                     }
                 }
